@@ -3,6 +3,14 @@ import { Formik, Field, Form } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { Button } from '@material-ui/core';
 import styled from 'styled-components';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object({
+  username: Yup.string("Enter a username").required("Username is required"),
+  email: Yup.string("Enter your email").email("Must be a valid email").required("Email is required"),
+  password: Yup.string("Enter your password").min(6, "Password must be at least 6 characters long").required("Password field is required"),
+  confirmPassword: Yup.string("Re-enter your password").required("Please confirm your password").oneOf([Yup.ref("password")], "Passwords must match"),
+})
 
 const Container = styled.div`
   width: 90%;
@@ -40,6 +48,7 @@ const UserForm = () => {
         email: '',
         password: '',
       }}
+      validationSchema={validationSchema}
       render={({submitForm, isSubmitting, values, setFieldValue}) => (
         <Form>
           <FieldGroup>
